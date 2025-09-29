@@ -40,8 +40,7 @@ void main() {
     if (blur_map_mode >= 0.5) {
       if (is_final_pass > 0.5) {
         // Blend original with current (already blurred horizontally if any)
-        vec2 uv_orig = vec2(uv.x, 1.0 - uv.y);
-        vec4 orig = texture(original_texture, uv_orig);
+        vec4 orig = texture(original_texture, uv);
         vec4 blurredTint = mix(base, tint_color, blur_value * tint_color.a);
         frag_color = mix(orig, blurredTint, blur_value);
       } else {
@@ -94,8 +93,7 @@ void main() {
   vec4 blurred = color / total_weight;
   if (blur_map_mode >= 0.5) {
     if (is_final_pass > 0.5) {
-      vec2 uv_orig = vec2(uv.x, 1.0 - uv.y);
-      vec4 orig = texture(original_texture, uv_orig);
+      vec4 orig = texture(original_texture, uv);
       vec4 blurredTint = mix(blurred, tint_color, blur_value * tint_color.a);
       frag_color = mix(orig, blurredTint, blur_value);
     } else {
