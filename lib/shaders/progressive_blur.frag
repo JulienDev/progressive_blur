@@ -30,7 +30,9 @@ void main() {
   vec2 uv = FlutterFragCoord().xy / child_size;
   
   // Apply response curve to the blur map
-  float blur_value = pow(texture(blur_texture, uv).r, max(map_exponent, 0.0001));
+  // Avoid pow() on very small values to prevent artifacts on iOS
+  float raw_blur = texture(blur_texture, uv).r;
+  float blur_value = (raw_blur < 0.001) ? 0.0 : pow(raw_blur, max(map_exponent, 0.0001));
   float sigma = (blur_map_mode < 0.5) ? (blur_sigma * blur_value) : blur_sigma;
   vec2 dir = blur_direction == 0.0 ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
 
